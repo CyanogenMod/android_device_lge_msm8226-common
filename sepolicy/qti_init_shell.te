@@ -4,3 +4,5 @@ allow qti_init_shell unlabeled:file getattr;
 allow qti_init_shell vfat:file { read open };
 allow qti_init_shell unlabeled:dir search;
 allow qti_init_shell vfat:dir search;
+allow qti_init_shell btnvtool_exec:file { read getattr open execute execute_no_trans };
+allow qti_init_shell hwaddrs_exec:file { read getattr open execute execute_no_trans };
