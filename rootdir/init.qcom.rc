@@ -41,6 +41,8 @@ on init
 
     # NFC fix
     symlink /dev/pn547 /dev/pn544
+    symlink /dev/pn547 /dev/pn54x
+    setprop ro.nfc.port "I2C"
 
 on post-fs
     chmod 664 /sys/devices/virtual/input/lge_touch/touch_gesture
