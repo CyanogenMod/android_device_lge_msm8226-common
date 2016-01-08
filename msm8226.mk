@@ -159,6 +159,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     camera.msm8226
 
+# Camera
+PRODUCT_PACKAGES += \
+    Snap
+
 ifeq ($(BOARD_HAS_NFC), true) 
 # NFC packages
 PRODUCT_PACKAGES += \
