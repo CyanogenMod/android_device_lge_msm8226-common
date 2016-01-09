@@ -160,6 +160,9 @@ PRODUCT_PACKAGES += \
     camera.msm8226 \
     Snap
 
+# SWIRRC
+PRODUCT_PACKAGES += liblgir
+
 ifeq ($(BOARD_HAS_NFC), true)
 # NFC packages
 PRODUCT_PACKAGES += \
