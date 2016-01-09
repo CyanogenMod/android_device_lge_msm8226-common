@@ -23,3 +23,5 @@
 
 /data/misc/sensor(/.*)?			u:object_r:sensors_data_file:s0
 
+# LG SwIRRC
+/system/bin/irrcServer		u:object_r:irrc_exec:s0
