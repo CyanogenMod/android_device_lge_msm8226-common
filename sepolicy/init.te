@@ -4,3 +4,9 @@ allow init self:process execmem;
 allow init labeledfs:filesystem remount;
 allow init lge_touch_sysfs:file { relabelto setattr };
 allow init socket_device:sock_file { create setattr };
+
+# LG SwIRRC
+allow init audio_device:chr_file { write ioctl };
+allow init mediaserver:binder { transfer call };
+allow init mediaserver:fd use;
+allow init servicemanager:binder { transfer call };
