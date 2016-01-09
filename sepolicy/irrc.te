@@ -1,0 +1,13 @@
+# LG SwIRRC
+type irrc, domain;
+type irrc_exec, exec_type, file_type;
+init_daemon_domain(irrc)
+
+allow irrc self:process execmem;
+allow irrc servicemanager:binder { transfer call };
+allow irrc audio_device:chr_file { read write ioctl open };
+allow irrc mediaserver:binder { transfer call };
+allow irrc mediaserver:fd use;
+allow irrc servicemanager:binder call;
+allow irrc mediaserver_service:service_manager find;
+allow irrc irrc_service:service_manager add;
