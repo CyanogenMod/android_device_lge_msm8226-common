@@ -57,7 +57,9 @@ done
 DEVICE_PACKAGE_OVERLAYS := vendor/$VENDOR/$DEVICE/overlay
 
 PRODUCT_PACKAGES += \\
-    shutdownlistener
+    shutdownlistener \\
+    QuicksetSDK \\
+    QuickRemote
 
 PRODUCT_PACKAGES += \\
     libtime_genoff \\
@@ -73,7 +75,10 @@ PRODUCT_PACKAGES += \\
     libqmi_csi \\
     libqmi_cci \\
     libqmi_common_so \\
-    libdsi_netctrl
+    libdsi_netctrl \\
+    liblgewg \\
+    libirrcClient \\
+    libirrc
 
 #com.qualcomm.services.location
 \$(call inherit-product, vendor/$VENDOR/$DEVICE/$DEVICE-vendor-blobs.mk)
@@ -155,6 +160,26 @@ include \$(CLEAR_VARS)
 LOCAL_MODULE := TimeService
 LOCAL_MODULE_OWNER := $VENDOR
 LOCAL_SRC_FILES := proprietary/app/TimeService/TimeService.apk
+LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE_SUFFIX := \$(COMMON_ANDROID_PACKAGE_SUFFIX)
+LOCAL_MODULE_CLASS := APPS
+LOCAL_CERTIFICATE := platform
+include \$(BUILD_PREBUILT)
+
+include \$(CLEAR_VARS)
+LOCAL_MODULE := QuicksetSDK
+LOCAL_MODULE_OWNER := lge
+LOCAL_SRC_FILES := proprietary/app/QuicksetSDK/QuicksetSDK.apk
+LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE_SUFFIX := \$(COMMON_ANDROID_PACKAGE_SUFFIX)
+LOCAL_MODULE_CLASS := APPS
+LOCAL_CERTIFICATE := platform
+include \$(BUILD_PREBUILT)
+
+include \$(CLEAR_VARS)
+LOCAL_MODULE := QuickRemote
+LOCAL_MODULE_OWNER := lge
+LOCAL_SRC_FILES := proprietary/app/QuickRemote/QuickRemote.apk
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE_SUFFIX := \$(COMMON_ANDROID_PACKAGE_SUFFIX)
 LOCAL_MODULE_CLASS := APPS
@@ -290,6 +315,39 @@ LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE_SUFFIX := .so
 LOCAL_MODULE_CLASS := SHARED_LIBRARIES
 include \$(BUILD_PREBUILT)
+
+include \$((CLEAR_VARS)
+LOCAL_MODULE := libirrc
+LOCAL_MODULE_OWNER := $VENDOR
+LOCAL_SRC_FILES := proprietary/lib/libirrc.so
+LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE_SUFFIX := .so
+LOCAL_MODULE_CLASS := SHARED_LIBRARIES
+LOCAL_MODULE_PATH := \$((TARGET_OUT_SHARED_LIBRARIES)
+LOCAL_PROPRIETARY_MODULE := true
+include \$((BUILD_PREBUILT)
+
+include \$((CLEAR_VARS)
+LOCAL_MODULE := libirrcClient
+LOCAL_MODULE_OWNER := $VENDOR
+LOCAL_SRC_FILES := proprietary/lib/libirrcClient.so
+LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE_SUFFIX := .so
+LOCAL_MODULE_CLASS := SHARED_LIBRARIES
+LOCAL_MODULE_PATH := \$((TARGET_OUT_SHARED_LIBRARIES)
+LOCAL_PROPRIETARY_MODULE := true
+include \$((BUILD_PREBUILT)
+
+include \$((CLEAR_VARS)
+LOCAL_MODULE := liblgewg
+LOCAL_MODULE_OWNER := $VENDOR
+LOCAL_SRC_FILES := proprietary/lib/liblgewg.so
+LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE_SUFFIX := .so
+LOCAL_MODULE_CLASS := SHARED_LIBRARIES
+LOCAL_MODULE_PATH := \$((TARGET_OUT_SHARED_LIBRARIES)
+LOCAL_PROPRIETARY_MODULE := true
+include \$((BUILD_PREBUILT)
 
 endif
 
