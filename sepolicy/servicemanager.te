@@ -1,3 +1,8 @@
 allow servicemanager thermal-engine:dir search;
 allow servicemanager thermal-engine:file r_file_perms;
 allow servicemanager thermal-engine:process getattr;
+
+# LG SwIRRC
+allow servicemanager irrc:dir search;
+allow servicemanager irrc:file { read open };
+allow servicemanager irrc:process getattr;
