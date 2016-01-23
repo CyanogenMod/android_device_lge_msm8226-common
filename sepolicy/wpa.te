@@ -1,1 +1,4 @@
-allow wpa wpa_device:chr_file r_file_perms;
+allow wpa rfkill_device:chr_file rw_file_perms;
+allow wpa block_device:dir search;
+allow wpa ta_data_file:dir search;
+
