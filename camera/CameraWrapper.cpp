@@ -328,14 +328,30 @@ static char *camera_fixup_getparams(int id, const char *settings)
     android::CameraParameters params;
     params.unflatten(android::String8(settings));
 
-    if (BACK_CAMERA_ID == id) {
-   	 params.set(CameraParameters::KEY_SUPPORTED_PREVIEW_SIZES, supportedPreviewSizes);
-    } else if (FRONT_CAMERA_ID == id) {
-   	 params.set(CameraParameters::KEY_SUPPORTED_PREVIEW_SIZES, supportedPreviewSizesSelfie);
+    if (params.get(CameraParameters::KEY_RECORDING_HINT) != NULL) {
+        photoMode = (!strcmp(params.get(CameraParameters::KEY_RECORDING_HINT), "false"));
     }
 
-    if (params.get(CameraParameters::KEY_RECORDING_HINT)) {
-        photoMode = (!strcmp(params.get(CameraParameters::KEY_RECORDING_HINT), "false"));
+    if (BACK_CAMERA_ID == id) {
+   	 params.set(CameraParameters::KEY_SUPPORTED_PREVIEW_SIZES, supportedPreviewSizes);
+         if (photoMode) {
+             /* Set "fake" QCOM standart parameters */
+             params.set(CameraParameters::KEY_MIN_FOCUS_SCALE, "1");
+             params.set(CameraParameters::KEY_MAX_FOCUS_SCALE, "60");
+             params.set(CameraParameters::KEY_QC_SUPPORTED_MANUAL_FOCUS_MODES, "off,scale-mode");
+             /* Fix manual focus parameters */
+             if (params.get(CameraParameters::KEY_MANUAL_FOCUS_SCALE) == NULL) {
+                 if (params.get(CameraParameters::KEY_PARAM_FOCUS_LENGTH) != NULL) {
+                     /* Set the previous focus length value */
+                     params.set(CameraParameters::KEY_MANUAL_FOCUS_SCALE, params.get(CameraParameters::KEY_PARAM_FOCUS_LENGTH));
+                 } else {
+                     /* Set the average focus length value */
+                     params.set(CameraParameters::KEY_MANUAL_FOCUS_SCALE, "30");
+                 }
+             }
+         }
+    } else if (FRONT_CAMERA_ID == id) {
+   	 params.set(CameraParameters::KEY_SUPPORTED_PREVIEW_SIZES, supportedPreviewSizesSelfie);
     }
 
     property_get("ro.product.board", board, "ro.product.board not found!!!");
@@ -387,15 +403,24 @@ static char *camera_fixup_setparams(const char *settings)
 {
     bool photoMode = true;
     bool sceneModeHdr = false;
+    const char *manualFocusPosition;
 
     android::CameraParameters params;
     params.unflatten(android::String8(settings));
 
-    if (params.get(CameraParameters::KEY_RECORDING_HINT)) {
+    if (params.get(CameraParameters::KEY_RECORDING_HINT) != NULL) {
         photoMode = (!strcmp(params.get(CameraParameters::KEY_RECORDING_HINT), "false"));
     }
     if (photoMode) {
         sceneModeHdr = (!strncmp(params.get(CameraParameters::KEY_SCENE_MODE), "hdr", 3));
+        if ((params.get(CameraParameters::KEY_MANUAL_FOCUS_POSITION) != NULL) && (!strcmp(params.get(CameraParameters::KEY_FOCUS_MODE), "manual"))) {
+             params.set(CameraParameters::KEY_FOCUS_MODE, "normal");
+             manualFocusPosition = strdup(params.get(CameraParameters::KEY_MANUAL_FOCUS_POSITION));
+             /* Real HAL parameter */
+             params.set(CameraParameters::KEY_PARAM_FOCUS_LENGTH, manualFocusPosition);
+             /* "Fake" standart QCOM parameter */
+             params.set(CameraParameters::KEY_MANUAL_FOCUS_SCALE, manualFocusPosition);
+        }
     }
 
     /* Set "hdr-mode"="1" if fake hdr scene mode activated */
