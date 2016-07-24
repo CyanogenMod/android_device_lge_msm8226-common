@@ -335,6 +335,9 @@ static char *camera_fixup_getparams(int id, const char *settings)
     }
 
     if (params.get(CameraParameters::KEY_RECORDING_HINT)) {
+        if (!strcmp(params.get(CameraParameters::KEY_FOCUS_MODE), "normal")) {
+            params.set(CameraParameters::KEY_FOCUS_MODE, "macro");
+        }
         photoMode = (!strcmp(params.get(CameraParameters::KEY_RECORDING_HINT), "false"));
     }
 
@@ -395,6 +398,10 @@ static char *camera_fixup_setparams(const char *settings)
         photoMode = (!strcmp(params.get(CameraParameters::KEY_RECORDING_HINT), "false"));
     }
     if (photoMode) {
+        if (!strcmp(params.get(CameraParameters::KEY_FOCUS_MODE), "macro")) {
+            params.set(CameraParameters::KEY_FOCUS_MODE, "normal");
+            params.set(CameraParameters::KEY_PARAM_FOCUS_LENGTH, "1");
+        }
         sceneModeHdr = (!strncmp(params.get(CameraParameters::KEY_SCENE_MODE), "hdr", 3));
     }
 
