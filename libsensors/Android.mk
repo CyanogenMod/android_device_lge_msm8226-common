@@ -1,3 +1,3 @@
-ifneq ($(filter w5 jagnm, $(TARGET_DEVICE)),)
+ifneq ($(filter g2m jag3ds jagnm w5 w7 , $(TARGET_DEVICE)),)
 include $(all-subdir-makefiles)
 endif
